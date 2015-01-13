@@ -135,7 +135,6 @@
       $( "#opponents" ).show();
       $( "#playing" ).show();
       $( ".myshot" ).remove();
-      $( "#info" ).html( "" );
       $( "[data-pos]" ).css({background:"transparent"});
     });
   };
@@ -151,10 +150,27 @@
     return turno;
   };
 
+  var checkEndOfGame = function(){
+    Meteor.call( "isEndOfGame", Session.get( "idPartidaActiva" ), function( err, data ) {
+      if ( !err ) {
+        if ( data == Session.get( "userNum" ) ) {
+          msg = "¡ENHORABUENA!<br>¡¡GANASTE!!";
+        } else {
+          msg = "LO SIENTO, ¡HAS PERDIDO!<br>LA PROXIMA VEZ SERÁ...";
+        }
+        $( "#info" ).html( msg );
+        isEndOfGame = true;
+        cancelGame( Session.get( "idPartidaActiva" ) );
+        Session.set( "idPartidaActiva", null );
+      }
+    });
+  };
+
   Meteor.startup(function () {
     Session.set( "idPartidaActiva", null );
     Session.set( "numUser", null );
     Session.set( "turno", null );
+    isEndOfGame = false;
 
     usersOnlineDB.find({}).observe({
       changed:function(){
@@ -202,13 +218,15 @@
     turno: function() {
       var msg = "",
           turno = aQuienLeToca();
-      if ( Meteor.user() && Session.get( "idPartidaActiva" ) !== null ) {
-        if ( turno == Session.get( "numUser" ) ) {
-          msg = "Mi turno";
-          $( ".goleft" ).trigger( "click" );
-        } else {
-          msg = "Turno de su oponente";
-          $( ".goright" ).trigger( "click" );
+      if ( !isEndOfGame ) {
+        if ( Meteor.user() && Session.get( "idPartidaActiva" ) !== null ) {
+          if ( turno == Session.get( "numUser" ) ) {
+            msg = "Mi turno";
+            $( ".goleft" ).trigger( "click" );
+          } else {
+            msg = "Turno de su oponente";
+            $( ".goright" ).trigger( "click" );
+          }
         }
       }
       return msg;
@@ -286,9 +304,8 @@
             }
             console.log( String.fromCharCode( 64 + xC ) + ", " + yC + ": " + data.response );
           }
+          checkEndOfGame();
         });
-      } else {
-        // ALERT: Turno de su oponente, espere por favor.
       }
     }
   });

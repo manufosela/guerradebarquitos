@@ -1,6 +1,8 @@
 //  partidasDB = new Meteor.Collection( "partidas" );
 //  usersOnlineDB = new Meteor.Collection( "usersonline" );
 
+  var counterOverlapTimes = 0;
+
   Meteor.startup(function () {
     // CADA VEZ QUE EL SERVIDOR SE REINICIA TODOS LOS USUARIOS QUEDAN OFFLINE
     usersOnlineDB.update( { online:true }, { $set:{online:false} } );
@@ -15,6 +17,7 @@
           console.log ( "Y's iguales " + y + " = " + p[j].yC );
           if ( x >= p[j].xC-1 && x <= p[j].xC + p[j].l + 1 ) {
             console.log ( x + " está entre " + p[j].xC +" y " + ( p[j].xC + p[j].l ) );
+            counterOverlapTimes++;
             return true;
           }
         }
@@ -46,6 +49,7 @@
               console.log ( "yCoord: " + yCoord );
               do {
                 xCoord = Math.floor( Math.random() * maxVal ) + 1;
+                if ( counterOverlapTimes > 5 ) {  yCoord = Math.floor( Math.random() * 10 ) + 1; counterOverlapTimes = 0; }
                 console.log ( "xCoord: " + xCoord );
               } while( overlap( shipPosition, xCoord, yCoord ) );
               console.log ( "--------------" );
@@ -82,7 +86,7 @@
       return shotsPosition;
     },
     wantPlayWith: function( user ) {
-      var me = Meteor.user().username, msg;
+      var me = Meteor.user().username, msg = "";
       if ( partidasDB.find( { usuario1:me, usuario2:user }).count() === 0 && partidasDB.find( { usuario1:user, usuario2:me }).count() === 0 ) {
         gameID = partidasDB.insert({
           '_id':new Mongo.ObjectID()._str,
@@ -106,7 +110,7 @@
           msg = "Partida ya en curso";
         }
       }
-      console.log( msg );
+      console.log( "Mensaje: " + msg );
       return msg;
     },
     acceptPlay: function( idGame ) {
@@ -114,7 +118,7 @@
       return result;
     },
     cancelPlay: function( idGame ) {
-      console.log( idGame );
+      console.log( "Cancelando GAME id: " + idGame );
       partidasDB.remove( {_id:idGame} );
     },
     shot: function( idPartida, numUser, xC, yC ){
@@ -167,6 +171,19 @@
       } else {
         usersOnlineDB.insert( { _id:userId, user:Meteor.user().username, online:true } );
       }
-      console.log( "entra ", userId );
+      console.log( "entra " + userId );
+    },
+    isEndOfGame: function( idPartida ){
+      var result = 0,
+          row = partidasDB.find( { _id:idPartida } ).fetch(),
+          partida = row[0],
+          shots_1 = partida.shots_1,
+          shots_2 = partida.shots_2,
+          s1 = _.filter( _.values( shots_1 ), function(n) { return (parseInt(n) == n ); }),
+          s2 = _.filter( _.values( shots_2 ), function(n) { return (parseInt(n) == n ); });
+      if ( s1.length == 20 ) { result = 1; }
+      if ( s2.length == 20 ) { result = 2; }
+      console.log ( "Gano usuario " + result + " -   ("+s1.length+"), ("+s2.length+")" );
+      return result;
     }
   });
