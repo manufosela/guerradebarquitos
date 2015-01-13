@@ -61,12 +61,14 @@
 
 <template name="playing">
   {{#if numpartidas}}
+  <div id="playing">
     <h2>Partidas en juego</h2>
     <ul>
     {{#each partidas}}
       <li>{{usuario1}} con {{usuario2}}</li>
     {{/each}}
     </ul>
+  </div>
   {{/if}}
 </template>
 

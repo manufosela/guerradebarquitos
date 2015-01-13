@@ -105,6 +105,7 @@
     $( "#info" ).html( "" );
     $( "#boats" ).show();
     $( "#opponents" ).hide();
+    $( "#playing" ).hide();
     $( "#peticiones" ).hide();
     $( "#botonera" ).show();
     $( "#message" ).show();
@@ -132,6 +133,7 @@
       Session.set( "idPartidaActiva", null );
       pausedGame();
       $( "#opponents" ).show();
+      $( "#playing" ).show();
       $( ".myshot" ).remove();
       $( "#info" ).html( "" );
       $( "[data-pos]" ).css({background:"transparent"});
