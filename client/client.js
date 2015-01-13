@@ -484,7 +484,9 @@
         }
       } else {
         if ( Session.get( "idPartidaActiva" ) !== null ) {
-          console.log ( "La partida fue cancelada" );
+          msg = "La partida fue cancelada";
+          console.log ( msg );
+          bootbox.alert( { message:msg, closeButton:false } );
           cancelGame( Session.get( "idPartidaActiva" ) );
           Session.set( "idPartidaActiva", null );
         }
