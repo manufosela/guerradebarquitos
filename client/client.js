@@ -159,7 +159,7 @@
           } else {
             msg = "LO SIENTO, ¡HAS PERDIDO!<br>LA PROXIMA VEZ SERÁ...";
           }
-          $( "#info" ).html( msg );
+          bootbox.alert( { message:msg, closeButton:false } );
           console.log ( "FIN DE JUEGO. " + msg );
           isEndOfGame = true;
           cancelGame( Session.get( "idPartidaActiva" ) );
@@ -175,15 +175,14 @@
     Session.set( "turno", null );
     isEndOfGame = false;
 
+    bootbox.alert( { message:"Bienvenido al juego de los barquitos", closeButton:false } );
+
     usersOnlineDB.find({}).observe({
       changed:function(){
         console.log ( "Change users online" );
         // COMPROBAR PARTIDAS ACTIVAS:
-
         // Actualizar lista de usuarios "Online" que pueden jugar
-
         //    si está jugando y el oponente se desconecta, sacar de la partida y avisar.
-
         //    si se acaba de logar y tiene partida activa y el oponente esta online ejecutar PlayGame.
         if ( Meteor.user() ) {
           var me = Meteor.user().username,
