@@ -297,13 +297,13 @@
           if ( !err ) {
             switch( data.response ) {
               case "1": case "2": case "3": case "4":
-                $( "#enemyboard" ).prepend( '<div id="enemyship_'+data.el.l+'_'+data.el.n+'" style="background:#F00; position:absolute; top:'+data.el.y+'px; left:'+data.el.x+'px; width:25px; height:25px;"></div>' );
+                $( "#enemyboard" ).prepend( '<div class="myshot" id="enemyship_'+data.el.l+'_'+data.el.n+'" style="background:#F00; position:absolute; top:'+data.el.y+'px; left:'+data.el.x+'px; width:25px; height:25px;"></div>' );
                 mp3 = new Audio( "/sound/touchsound.mp3" ); mp3.play();
                 break;
               case "A":
                 var offset = $( "#enemyboard" ).offset(),
                     xyPos = getXYPos( xC, yC, offset );
-                $( "#enemyboard" ).prepend( '<div id="enemyship_'+xC+'_'+yC+'" style="background:#00F; position:absolute; top:'+xyPos.y+'px; left:'+xyPos.x+'px; width:25px; height:25px;"></div>' );
+                $( "#enemyboard" ).prepend( '<div class="myshot" id="enemyship_'+xC+'_'+yC+'" style="background:#00F; position:absolute; top:'+xyPos.y+'px; left:'+xyPos.x+'px; width:25px; height:25px;"></div>' );
                 mp3 = new Audio( "/sound/watersound.mp3" ); mp3.play();
                 break;
             }
