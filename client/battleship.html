@@ -60,16 +60,16 @@
 </template>
 
 <template name="playing">
-  {{#if numpartidas}}
   <div id="playing">
+    {{#if numpartidas}}
     <h2>Partidas en juego</h2>
     <ul>
     {{#each partidas}}
       <li>{{usuario1}} con {{usuario2}}</li>
     {{/each}}
     </ul>
+    {{/if}}
   </div>
-  {{/if}}
 </template>
 
 <template name="peticiones">
