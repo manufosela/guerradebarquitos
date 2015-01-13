@@ -1,0 +1,145 @@
+<head>
+  <title>Juego de los barquitos</title>
+  <meta name="author" content="@manufosela" />
+</head>
+
+<body>
+	<header>
+  		<h1>Juego de los barquitos</h1>
+  		{{> loginButtons }}
+      {{> botonera }}
+  	</header>
+
+  	<div class="contenedor">
+  		{{> myboard }}
+  		{{> enemyboard }}
+  	</div>
+
+  	<footer>
+  		by @manufosela
+  	</footer>
+</body>
+
+<template name="botonera">
+  <div id="botonera">
+    <button title="Cancelar partida" class="btn btn-danger btn-xs cancelar">Cancelar</button>
+  </div>
+  <div id="message">{{turno}}</div>
+</template>
+
+<template name="myboard">
+  {{#if isLogged }}
+  	<div id="myboard">
+      <h3 id="info"></h3>
+      {{> peticiones }}
+      {{> opponents }}
+      {{> playing }}
+      {{> ships data}}  
+  		<canvas id="mysquare" width="346" height="346"></canvas>
+  	</div>
+   {{/if }}
+  {{#unless isLogged }}
+    <h4>Inicia sesión</h4>
+  {{/unless }}
+</template>
+
+<template name="opponents">
+  <div id="opponents">
+    {{#if users}}
+      <h2>Selecciona oponente</h2>
+      <ul>
+      {{#each users}}
+        <li>
+          <a href="#">{{user}}</a>
+          {{requestLaunched user}}
+        </li>
+      {{/each }}
+      </ul>
+    {{/if}}
+  </div>
+</template>
+
+<template name="playing">
+  {{#if numpartidas}}
+    <h2>Partidas en juego</h2>
+    <ul>
+    {{#each partidas}}
+      <li>{{usuario1}} con {{usuario2}}</li>
+    {{/each}}
+    </ul>
+  {{/if}}
+</template>
+
+<template name="peticiones">
+  {{#if thereAreRequestsToPlay }}
+  <h2>Selecciona Partida</h2>
+  <ul id="peticiones">
+    {{#each requestsToPlay}}
+      <li>
+        Peticion de partida de {{usuario1}}
+        <button title="Aceptar partida con {{usuario1}}" class="btn btn-success btn-xs aceptar" data-id="{{_id}}">Aceptar</button> 
+        <button title="Cancelar partida con {{usuario1}}" class="btn btn-danger btn-xs cancelar" data-id="{{_id}}">Cancelar</button>
+      </li>
+    {{/each}}
+  </ul>
+  {{/if}}
+</template>
+
+<template name="enemyboard">
+	<div id="enemyboard">
+		<i class="glyphicon glyphicon-chevron-right goright">&nbsp;</i>
+		<h2>Tablero del enemigo</h2>
+		<canvas id="enemysquare" width="345" height="345"></canvas>
+	</div>
+</template>
+
+<template name="ships">
+  <div id="boats">
+    <i class="glyphicon glyphicon-chevron-left goleft">&nbsp;</i>
+    <h2>Mi Tablero</h2>
+    <!-- 4 de 1 -->
+    <div class='boat' id='myship_1_1'>
+      <img id='imgMyShip_1_1_1' src='/img/{{data.boats1}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+    </div>
+    <div class='boat' id='myship_1_2'>
+      <img id='imgMyShip_1_2_1' src='/img/{{data.boats1}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+    </div>
+    <div class='boat' id='myship_1_3'>
+      <img id='imgMyShip_1_3_1' src='/img/{{data.boats1}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+    </div>
+    <div class='boat' id='myship_1_4'>
+      <img id='imgMyShip_1_4_1' src='/img/{{data.boats1}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+    </div>
+    <!-- 3 de 2 -->
+    <div class='boat' id='myship_2_1'>
+      <img id='imgMyShip_2_1_1' src='/img/{{data.boats2}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_2_1_2' src='/img/{{data.boats2}}40x40_2.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+    </div>
+    <div class='boat' id='myship_2_2'>
+      <img id='imgMyShip_2_2_1' src='/img/{{data.boats2}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_2_2_2' src='/img/{{data.boats2}}40x40_2.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+    </div>
+    <div class='boat' id='myship_2_3'>
+      <img id='imgMyShip_2_3_1' src='/img/{{data.boats2}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_2_3_2' src='/img/{{data.boats2}}40x40_2.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+    </div>
+    <!-- 2 de 3 -->
+    <div class='boat' id='myship_3_1'>
+      <img id='imgMyShip_3_1_1' src='/img/{{data.boats3}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_3_1_2' src='/img/{{data.boats3}}40x40_2.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_3_1_3' src='/img/{{data.boats3}}40x40_3.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+    </div>
+    <div class='boat' id='myship_3_2'>
+      <img id='imgMyShip_3_2_1' src='/img/{{data.boats3}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_3_2_2' src='/img/{{data.boats3}}40x40_2.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_3_2_3' src='/img/{{data.boats3}}40x40_3.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+    </div>
+    <!-- 1 de 4 -->
+      <div class='boat' id='myship_4_1'>
+      <img id='imgMyShip_4_1_1' src='/img/{{data.boats4}}40x40_1.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_4_1_2' src='/img/{{data.boats4}}40x40_2.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_4_1_3' src='/img/{{data.boats4}}40x40_3.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />
+      <img id='imgMyShip_4_1_4' src='/img/{{data.boats4}}40x40_4.png' width='{{data.wShipSize}}' height='{{data.hShipSize}}' />    
+    </div>
+  </div>
+</template>
