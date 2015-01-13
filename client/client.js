@@ -153,15 +153,18 @@
   var checkEndOfGame = function(){
     Meteor.call( "isEndOfGame", Session.get( "idPartidaActiva" ), function( err, data ) {
       if ( !err ) {
-        if ( data == Session.get( "userNum" ) ) {
-          msg = "¡ENHORABUENA!<br>¡¡GANASTE!!";
-        } else {
-          msg = "LO SIENTO, ¡HAS PERDIDO!<br>LA PROXIMA VEZ SERÁ...";
+        if ( data !== 0 ) {
+          if ( data == Session.get( "userNum" ) ) {
+            msg = "¡ENHORABUENA!<br>¡¡GANASTE!!";
+          } else {
+            msg = "LO SIENTO, ¡HAS PERDIDO!<br>LA PROXIMA VEZ SERÁ...";
+          }
+          $( "#info" ).html( msg );
+          console.log ( "FIN DE JUEGO. " + msg );
+          isEndOfGame = true;
+          cancelGame( Session.get( "idPartidaActiva" ) );
+          Session.set( "idPartidaActiva", null );
         }
-        $( "#info" ).html( msg );
-        isEndOfGame = true;
-        cancelGame( Session.get( "idPartidaActiva" ) );
-        Session.set( "idPartidaActiva", null );
       }
     });
   };
@@ -222,10 +225,10 @@
         if ( Meteor.user() && Session.get( "idPartidaActiva" ) !== null ) {
           if ( turno == Session.get( "numUser" ) ) {
             msg = "Mi turno";
-            $( ".goleft" ).trigger( "click" );
+            setTimeout( function(){ $( ".goleft" ).trigger( "click" ); }, 1000 );
           } else {
             msg = "Turno de su oponente";
-            $( ".goright" ).trigger( "click" );
+            setTimeout( function(){ $( ".goright" ).trigger( "click" ); }, 1000 );
           }
         }
       }
@@ -295,11 +298,13 @@
             switch( data.response ) {
               case "1": case "2": case "3": case "4":
                 $( "#enemyboard" ).prepend( '<div id="enemyship_'+data.el.l+'_'+data.el.n+'" style="background:#F00; position:absolute; top:'+data.el.y+'px; left:'+data.el.x+'px; width:25px; height:25px;"></div>' );
+                mp3 = new Audio( "/sound/touchsound.mp3" ); mp3.play();
                 break;
               case "A":
                 var offset = $( "#enemyboard" ).offset(),
                     xyPos = getXYPos( xC, yC, offset );
                 $( "#enemyboard" ).prepend( '<div id="enemyship_'+xC+'_'+yC+'" style="background:#00F; position:absolute; top:'+xyPos.y+'px; left:'+xyPos.x+'px; width:25px; height:25px;"></div>' );
+                mp3 = new Audio( "/sound/watersound.mp3" ); mp3.play();
                 break;
             }
             console.log( String.fromCharCode( 64 + xC ) + ", " + yC + ": " + data.response );

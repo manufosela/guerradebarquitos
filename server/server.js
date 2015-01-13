@@ -183,7 +183,8 @@
           s2 = _.filter( _.values( shots_2 ), function(n) { return (parseInt(n) == n ); });
       if ( s1.length == 20 ) { result = 1; }
       if ( s2.length == 20 ) { result = 2; }
-      console.log ( "Gano usuario " + result + " -   ("+s1.length+"), ("+s2.length+")" );
+      if ( result !== 0 ) { console.log( "Gano usuario " + result ); }
+      console.log ( s1.length+", "+s2.length );
       return result;
     }
   });
