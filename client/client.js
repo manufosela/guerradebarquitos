@@ -215,6 +215,7 @@
     'click BUTTON.cancelar': function() {
       var idPartidaActiva = Session.get( "idPartidaActiva" );
       cancelGame( idPartidaActiva );
+      $( "#info" ).html( "" );
     }
   });
   Template.botonera.helpers({
