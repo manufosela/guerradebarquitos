@@ -15,7 +15,7 @@
       for( j in p ) {
         if ( y === p[j].yC ) {
           console.log ( "Y's iguales " + y + " = " + p[j].yC );
-          if ( x >= p[j].xC-1 && x <= p[j].xC + p[j].l + 1 ) {
+          if ( x >= p[j].xC-1 && x <= p[j].xC + p[j].l ) {
             console.log ( x + " está entre " + p[j].xC +" y " + ( p[j].xC + p[j].l ) );
             counterOverlapTimes++;
             return true;
@@ -179,8 +179,8 @@
           partida = row[0],
           shots_1 = partida.shots_1,
           shots_2 = partida.shots_2,
-          s1 = _.filter( _.values( shots_1 ), function(n) { return (parseInt(n) == n ); }),
-          s2 = _.filter( _.values( shots_2 ), function(n) { return (parseInt(n) == n ); });
+          s1 = ( shots_1 )?_.filter( _.values( shots_1 ), function(n) { return (parseInt(n) == n ); }):0,
+          s2 = ( shots_2 )?_.filter( _.values( shots_2 ), function(n) { return (parseInt(n) == n ); }):0;
       if ( s1.length == 20 ) { result = 1; }
       if ( s2.length == 20 ) { result = 2; }
       if ( result !== 0 ) { console.log( "Gano usuario " + result ); }
