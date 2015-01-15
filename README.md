@@ -1,4 +1,4 @@
-# guerradebarquitos
+# Guerra de barquitos
 
 Típico juego de guerra de barquitos hecho con MeteorJS.
 
